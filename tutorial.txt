@@ -1,0 +1,111 @@
+npm install nodemon --save-dev
+
+#####################################################################################################
+
+require('dotenv').config(); //initializes dotenv
+const Discord = require('discord.js')
+
+const client = new Discord.Client(); //creates new client
+
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`)
+});
+
+//this line must be at the very end
+client.login(process.env.CLIENT_TOKEN); //signs the bot in with token
+
+#####################################################################################################
+
+require('dotenv').config(); // Load environment variables from .env file
+const { Client, GatewayIntentBits, Events } = require('discord.js'); // Import necessary classes
+
+// Create a new client instance with required intents
+const client = new Client({ 
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ]
+});
+
+// Event handler for when the bot is ready
+client.once(Events.ClientReady, () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+// Event handler for message events
+client.on(Events.MessageCreate, message => {
+  // Avoid responding to the bot's own messages
+  if (message.author.bot) return;
+
+  // Respond to the !ping command
+  if (message.content === '!ping') {
+    message.reply('Pong!');
+  }
+});
+
+// Log in the bot using the token from the environment variable
+client.login(process.env.CLIENT_TOKEN);
+
+
+
+
+
+
+
+
+
+// index.js
+const { Client, GatewayIntentBits } = require('discord.js');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
+require('dotenv').config(); // for loading environment variables
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+// Your bot token and client ID
+const { TOKEN, CLIENT_ID, GUILD_ID } = process.env;
+
+// Registering commands
+const commands = [
+    {
+        name: 'hello',
+        description: 'Replies with Hello!',
+    },
+];
+
+const rest = new REST({ version: '9' }).setToken(TOKEN);
+
+(async () => {
+    try {
+        console.log('Started refreshing application (/) commands.');
+
+        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
+            body: commands,
+        });
+
+        console.log('Successfully reloaded application (/) commands.');
+    } catch (error) {
+        console.error(error);
+    }
+})();
+
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    if (commandName === 'hello') {
+        await interaction.reply('Hello!');
+    }
+});
+
+client.login(TOKEN);
+
+Mongo_atlas
+zhang489yuan
+Nvmm1D3zyzntMsUu
